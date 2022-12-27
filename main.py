@@ -43,10 +43,6 @@ class Meteorite(pygame.sprite.Sprite):
     def update(self):
         pass
 
-
-for _ in range(10):
-    Meteorite(meteorites)
-
 # основной игровой цикл
 if __name__ == '__main__':
     running = True
@@ -55,7 +51,5 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 running = False
 
-        meteorites.draw(screen)
-        meteorites.update()
         pygame.display.flip()
     pygame.quit()
