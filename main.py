@@ -1,6 +1,7 @@
 import pygame
 import os
 import sys
+import random
 
 # инициалитзация pygame для работы со спрайтами и загрузкой изображения
 pygame.init()
