@@ -5,13 +5,14 @@ import random
 
 # инициалитзация pygame для работы со спрайтами и загрузкой изображения
 pygame.init()
-size = width, height = 1200, 800
+size = width, height = 1200, 840
+# ширина экрана должна быть кратна фреймрету (FPS)
 screen = pygame.display.set_mode(size)
 # инициализация спрайтов метеоритов
 meteorites = pygame.sprite.Group()
 # список из изображений метеоритов (длинна=9)
 images_of_meteorites = []
-FPS = 50
+FPS = 60
 
 # функция загрузки изоражения из папки data
 def load_image(name, colorkey=None):
@@ -39,21 +40,20 @@ class Meteorite(pygame.sprite.Sprite):
         super().__init__(*group)
         self.image = pygame.transform.scale(random.choice(images_of_meteorites), (100, 100))
         self.rect = self.image.get_rect()
+        self.angle = 0
         # стартовая пзиция
         self.rect.x = random.randint(0, width)
         self.rect.y = 0
         # скорость
-        self.vy = random.randint(300, 800)
-        if self.rect.x < width / 2:
-            self.vx = random.randint(-(self.rect.left / (height / self.vy)) // 1, ((width - self.rect.right) / (height / self.vy)) // 1)
-        else:
-            self.vx = random.randint(-(self.rect.left / (height / self.vy)) // 1, ((width - self.rect.right) / (height / self.vy)) // 1)
+        self.vy = random.randint(3, 5)
+        # перемещение методом rect.move() работает не покадрово а за каждый тик (1000 раз в секунду),
+        # поэтому указываем скорось в пикселях, деленных на фреймрейт
+        self.vx = random.randint(-((self.rect.left / FPS) / ((height / FPS) / self.vy)) // 1, (((width / FPS) - (self.rect.right / FPS)) / ((height / FPS) / self.vy)) // 1)
 
     def update(self):
-        self.rect.x += self.vx * clock.tick(FPS) / 1000
-        self.rect.y += self.vy * clock.tick(FPS) / 1000
+        self.rect = self.rect.move(self.vx, self.vy)
 
-for i in range(4):
+for i in range(5):
     Meteorite(meteorites)
 
 
@@ -65,9 +65,10 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        screen.fill(pygame.Color('Black'))
 
+        screen.fill(pygame.Color('Black'))
         meteorites.draw(screen)
         meteorites.update()
+        clock.tick(FPS)
         pygame.display.flip()
     pygame.quit()
