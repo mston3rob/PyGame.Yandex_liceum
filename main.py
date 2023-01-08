@@ -5,8 +5,15 @@ import random
 
 # инициалитзация pygame для работы со спрайтами и загрузкой изображения
 pygame.init()
-size = width, height = 1200, 800
+size = width, height = 1200, 840
+# ширина экрана должна быть кратна фреймрету (FPS)
 screen = pygame.display.set_mode(size)
+# инициализация спрайтов метеоритов
+meteorites = pygame.sprite.Group()
+# список из изображений метеоритов (длинна=9)
+images_of_meteorites = []
+FPS = 60
+surface = pygame.Surface((width, height))
 
 # функция загрузки изоражения из папки data
 def load_image(name, colorkey=None):
@@ -24,6 +31,11 @@ def load_image(name, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
+
+class Shells(pygame.sprite.Sprite):
+    pass
+
 
 # основной игровой цикл
 if __name__ == '__main__':
